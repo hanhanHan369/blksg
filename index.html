@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barrio Conecta - Skill Exchange</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #FF8C32;
+            --primary-light: #FFF4E6;
+            --bg-cream: #FFFDF5;
+            --text-dark: #333;
+            --text-muted: #666;
+            --white: #ffffff;
+            --shadow: 0 4px 12px rgba(0,0,0,0.05);
+            --border-radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-cream);
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        /* --- Navbar --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: bold;
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+
+        .logo i { font-size: 1.5rem; }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: 0.3s;
+        }
+
+        .nav-links a.active {
+            color: var(--white);
+            background: var(--primary);
+            padding: 8px 16px;
+            border-radius: 20px;
+        }
+
+        /* --- Hero Section --- */
+        header {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        /* --- Stats Grid --- */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            max-width: 1000px;
+            margin: 0 auto 40px;
+            padding: 0 20px;
+        }
+
+        .stat-card {
+            background: var(--white);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .stat-info h3 { font-size: 0.8rem; color: var(--text-muted); }
+        .stat-info p { font-size: 1.8rem; font-weight: bold; color: var(--primary); }
+
+        .stat-icon {
+            background: var(--primary-light);
+            color: var(--primary);
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        /* --- Search & Filter --- */
+        .main-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .search-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .search-bar {
+            flex-grow: 1;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 15px 15px 15px 45px;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            outline: none;
+            box-shadow: var(--shadow);
+        }
+
+        .search-bar i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        .btn-post {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(255, 140, 50, 0.3);
+        }
+
+        /* --- Categories Horizontal Scroll --- */
+        .category-filter {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 15px;
+            scrollbar-width: thin;
+        }
+
+        .category-filter::-webkit-scrollbar { height: 4px; }
+        .category-filter::-webkit-scrollbar-thumb { background: #ddd; border-radius: 10px; }
+
+        .cat-pill {
+            white-space: nowrap;
+            padding: 10px 18px;
+            background: var(--white);
+            border: 1px solid #eee;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+        }
+
+        .cat-pill.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .cat-pill:hover:not(.active) {
+            background: var(--primary-light);
+        }
+
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">
+            <i class="fas fa-cubes"></i>
+            <div>
+                <p>Barrio Conecta</p>
+                <small style="font-weight: normal; font-size: 0.7rem; color: #666;">Skill exchange</small>
+            </div>
+        </div>
+        <div class="nav-links">
+            <a href="#" class="active"><i class="fas fa-home"></i> Home</a>
+            <a href="#"><i class="fas fa-map-marked-alt"></i> Map</a>
+            <a href="#"><i class="fas fa-plus"></i> Post</a>
+            <a href="#"><i class="fas fa-shield-alt"></i> Security</a>
+            <a href="#"><i class="far fa-user"></i> Profile</a>
+            <a href="#"><i class="fas fa-globe"></i> es</a>
+        </div>
+    </nav>
+
+    <header>
+        <h1>Your community, your skills</h1>
+        <p>Connect with neighbors, exchange favors and build a stronger community</p>
+    </header>
+
+    <div class="stats-container">
+        <div class="stat-card">
+            <div class="stat-info">
+                <h3>Active Skills</h3>
+                <p>0</p>
+            </div>
+            <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-info">
+                <h3>Active Neighbors</h3>
+                <p>0</p>
+            </div>
+            <div class="stat-icon"><i class="fas fa-users"></i></div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-info">
+                <h3>Total Exchanges</h3>
+                <p>0</p>
+            </div>
+            <div class="stat-icon"><i class="fas fa-exchange-alt"></i></div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="search-row">
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search skills, services...">
+            </div>
+            <button class="btn-post">Post Skill</button>
+        </div>
+
+        <div class="category-filter" id="categoryContainer">
+            <div class="cat-pill active">All</div>
+            <div class="cat-pill"><i class="fas fa-home"></i> Hogar</div>
+            <div class="cat-pill"><i class="fas fa-laptop-code"></i> Tecnología</div>
+            <div class="cat-pill"><i class="fas fa-heart"></i> Cuidados</div>
+            <div class="cat-pill"><i class="fas fa-book"></i> Enseñanza</div>
+            <div class="cat-pill"><i class="fas fa-seedling"></i> Jardinería</div>
+            <div class="cat-pill"><i class="fas fa-tools"></i> Reparaciones</div>
+            <div class="cat-pill"><i class="fas fa-utensils"></i> Cocina</div>
+            <div class="cat-pill"><i class="fas fa-dog"></i> Mascotas</div>
+        </div>
+    </div>
+
+    <script>
+        // Simple script to handle pill selection
+        const pills = document.querySelectorAll('.cat-pill');
+        
+        pills.forEach(pill => {
+            pill.addEventListener('click', () => {
+                pills.forEach(p => p.classList.remove('active'));
+                pill.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
