@@ -1,42 +1,44 @@
 import streamlit as st
+import streamlit.components.v1 as components
 import os
-import json
-from datetime import datetime
 
-# Setup
-st.set_page_config(page_title="Barrio Conecta Admin", page_icon="🧡")
-UPLOAD_DIR = "assets/uploads"
-DATA_FILE = "portfolio_data.json"
+# 1. Setup the Page Layout
+st.set_page_config(page_title="Barrio Conecta", layout="wide")
 
-if not os.path.exists(UPLOAD_DIR):
-    os.makedirs(UPLOAD_DIR)
+# 2. CREATE THE BUTTONS (Sidebar Navigation)
+# This creates a menu on the left that acts as your buttons
+st.sidebar.title("Town Directory Menu")
+choice = st.sidebar.radio("Navigate to:", ["🏠 Home Page", "📊 My Portfolio", "📤 Upload Manager"])
 
-st.title("🧡 Barrio Conecta: Portfolio Manager")
-st.write("Upload your contributions to the town directory.")
+# 3. Helper Function to Read and Display your HTML
+def show_html_page(file_name):
+    if os.path.exists(file_name):
+        with open(file_name, 'r', encoding='utf-8') as f:
+            html_code = f.read()
+        
+        # This is the "Portal" that displays your HTML
+        # height=1000 ensures you can see the whole page
+        components.html(html_code, height=1000, scrolling=True)
+    else:
+        st.error(f"❌ File Not Found: I couldn't find '{file_name}' in the folder.")
+        st.info(f"Current Directory: {os.getcwd()}")
+        st.write("Current files in folder:", os.listdir("."))
 
-# Form to add a new contribution
-with st.form("contribution_form"):
-    title = st.text_input("Project Title (e.g., Urban Gardening)")
-    description = st.text_area("What did you achieve?")
-    category = st.selectbox("Category", ["Hogar", "Tecnología", "Cuidados", "Enseñanza"])
-    uploaded_file = st.file_uploader("Upload a photo of your work", type=['png', 'jpg', 'jpeg'])
-    
-    submit = st.form_submit_button("Add to Portfolio")
+# 4. ROUTING LOGIC (The "Brain" of your app)
+if choice == "🏠 Home Page":
+    st.write("### Viewing: Community Home")
+    show_html_page("index.html")
 
-if submit and uploaded_file:
-    # Save the image
-    file_path = os.path.join(UPLOAD_DIR, uploaded_file.name)
-    with open(file_path, "wb") as f:
-        f.write(uploaded_file.getbuffer())
-    
-    # Save the metadata (This acts like your "API Database")
-    new_entry = {
-        "title": title,
-        "description": description,
-        "category": category,
-        "image": file_path,
-        "date": datetime.now().strftime("%Y-%m-%d")
-    }
-    
-    st.success(f"Successfully added '{title}' to your portfolio!")
-    st.json(new_entry) # This shows you what the "API" would send back
+elif choice == "📊 My Portfolio":
+    st.write("### Viewing: User Portfolio")
+    show_html_page("dashboard.html")
+
+elif choice == "📤 Upload Manager":
+    st.title("🧡 Portfolio Manager")
+    # This is the Streamlit part for uploading photos
+    with st.form("upload_form"):
+        title = st.text_input("Work Experience Title")
+        img = st.file_uploader("Upload Image", type=["jpg", "png"])
+        submit = st.form_submit_button("Save to Portfolio")
+        if submit:
+            st.success("Successfully saved! (Note: It won't show in dashboard.html yet without an API connection)")
