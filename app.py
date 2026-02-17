@@ -5,6 +5,22 @@ import os
 # 1. Setup the Page Layout
 st.set_page_config(page_title="Barrio Conecta", layout="wide")
 
+# Force the app to use every pixel of the screen width
+st.markdown("""
+    <style>
+        .block-container {
+            padding-top: 0rem;
+            padding-bottom: 0rem;
+            padding-left: 0rem;
+            padding-right: 0rem;
+        }
+        iframe {
+            width: 100%;
+            border: none;
+        }
+    </style>
+    """, unsafe_allow_html=True)
+
 # 2. CREATE THE BUTTONS (Sidebar Navigation)
 # This creates a menu on the left that acts as your buttons
 st.sidebar.title("Town Directory Menu")
