@@ -1,7 +1,39 @@
 import streamlit as st
 import streamlit.components.v1 as components
 import os
+import mysql.connector
+import streamlit as st
 
+# Function to establish a database connection
+def init_connection():
+    return mysql.connector.connect(
+        host=st.secrets["mysql"]["host"],
+        user=st.secrets["mysql"]["user"],
+        password=st.secrets["mysql"]["password"],
+        database=st.secrets["mysql"]["database"]
+    )
+
+conn = init_connection()
+
+# Function to save a new entry
+def save_entry(title, description, category, image_path):
+    cursor = conn.cursor()
+    query = """
+    INSERT INTO portfolio_entries (user_id, title, description, category, image_path) 
+    VALUES (%s, %s, %s, %s, %s)
+    """
+    # Using a placeholder 'user123' until you implement a login system
+    cursor.execute(query, ('user123', title, description, category, image_path))
+    conn.commit()
+    cursor.close()
+
+# Function to fetch all entries for the dashboard
+def get_entries():
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM portfolio_entries ORDER BY created_at DESC")
+    result = cursor.fetchall()
+    cursor.close()
+    return result
 # 1. Setup the Page Layout
 st.set_page_config(page_title="Barrio Conecta", layout="wide")
 
